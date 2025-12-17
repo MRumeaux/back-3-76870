@@ -1,0 +1,3 @@
+URLMONGO = # Agregar link a mongo
+DBNAME = 'demoPets'
+PORT = # Agregar port
