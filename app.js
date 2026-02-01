@@ -1,14 +1,13 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
-import usersRouter from './routes/users.router.js';
-import petsRouter from './routes/pets.router.js';
-import adoptionsRouter from './routes/adoption.router.js';
-import sessionsRouter from './routes/sessions.router.js';
-import mocksRouter from './routes/mocks.router.js'
-import variables_env from './utils/variables_env.js';
-import { initMongoDB } from './utils/connect-mongo.js';
+import usersRouter from './src/routes/users.router.js';
+import petsRouter from './src/routes/pets.router.js';
+import adoptionsRouter from './src/routes/adoption.router.js';
+import sessionsRouter from './src/routes/sessions.router.js';
+import mocksRouter from './src/routes/mocks.router.js'
+import variables_env from './src/utils/variables_env.js';
+import { initMongoDB } from './src/utils/connect-mongo.js';
 
 const app = express();
 const PORT = variables_env.PORT||8080;

@@ -1,0 +1,8 @@
+version: '2.20.3'
+servvices:
+  mongodocker:
+  image: mongo:latest
+  ports:
+    - "27017:27017"
+  volumes:
+    - "/d/DOCKER/MONGO/comision-76870:/data/db"
