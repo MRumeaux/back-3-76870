@@ -1,35 +1,165 @@
 paths:
   /api/users:
     get:
-      summary: Traer todos los usuarios
-      tags:
+      tags: 
         - users
+      summary: Trae a todos los usuarios
+      description: Devuelve una lista completa con todos los usuarios registrados.
       responses:
         "200":
-          description: Lista de usuarios completa
+          description: Listado recuperado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponse"
         "500":
-          description: Error interno del servidor
+          $ref: "#/components/responses/InternalServerError"
+
   /api/users/{uid}:
     get:
-      summary: Obtener un usuario por ID
-      tags:
+      tags: 
         - users
+      summary: Busca un usuario por ID
+      description: Devuelve los datos de un usuario usando su Mongo ObjectId.
       parameters:
-        - name: uid
-          in: path
-          required: true
-          description: ID del usuario
-          schema:
-            type: string
+        - $ref: "#/components/parameters/UserId"
       responses:
         "200":
-          description: Usuario encontrado
+          description: Usuario encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
         "404":
-          description: Usuario no encontrado
+          $ref: "#/components/responses/UserNotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    put:
+      tags: 
+        - users
+      summary: Actualiza los datos de un usuario
+      description: Permite modificar la información de un usuario existente.
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdateRequest"
+      responses:
+        "200":
+          description: Los datos se actualizaron correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "404":
+          $ref: "#/components/responses/UserNotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    delete:
+      tags: 
+        - users
+      summary: Elimina a un usuario
+      description: Borra definitivamente a un usuario del sistema por su ID.
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      responses:
+        "200":
+          description: El usuario se eliminó de la base de datos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteUserResponse"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "404":
+          $ref: "#/components/responses/UserNotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
 components:
+  parameters:
+    UserId:
+      name: uid
+      in: path
+      required: true
+      description: El ID del usuario (debe ser un Mongo ObjectId válido).
+      schema:
+        type: string
+
+  responses:
+    InvalidId:
+      description: El ID enviado no tiene un formato válido.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            status: "error"
+            error: "El formato del ID no es válido"
+
+    UserNotFound:
+      description: No pudimos encontrar a ese usuario.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            status: "error"
+            error: "Usuario no encontrado"
+
+    InternalServerError:
+      description: Hubo un problema inesperado en el servidor.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            status: "error"
+            error: "Error interno del servidor"
+
   schemas:
+    PetRef:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID de la mascota vinculada.
+
     User:
       type: object
+      properties:
+        _id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          example: "user"
+        pets:
+          type: array
+          items:
+            $ref: "#/components/schemas/PetRef"
+      required:
+        - first_name
+        - last_name
+        - email
+
+    UserUpdateRequest:
+      type: object
+      description: Campos que podés modificar del usuario.
       properties:
         first_name:
           type: string
@@ -39,8 +169,53 @@ components:
           type: string
         role:
           type: string
-      example:
-        first_name: Armando
-        last_name: Paredes
-        email: aparedes@mail.com
-        role: user
+
+    UsersResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        payload:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+
+    UserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        payload:
+          $ref: "#/components/schemas/User"
+
+    MessageResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        message:
+          type: string
+          example: "Usuario actualizado"
+
+    DeleteUserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        message:
+          type: string
+          example: "Usuario eliminado"
+        payload:
+          $ref: "#/components/schemas/User"
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        error:
+          type: string
