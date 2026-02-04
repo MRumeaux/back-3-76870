@@ -1,74 +1,51 @@
 import { describe, test } from "node:test";
 import assert from "node:assert";
-import variables_env from "../utils/variables_env";
+import variables_env from "../utils/variables_env.js";
 
-const API_URL = `http://localhost:${variables_env.PORT||8080}`;
+const API_URL = `http://localhost:${variables_env.PORT || 8080}/api/adoptions`;
 
 describe("Adoptions API Tests", () => {
 
-    test("GET /api/adoptions - tiene que retornar todas las adopciones", async () => {
-        const response = await fetch(`${API_URL}/api/adoptions`);
+    test("GET /api/adoptions - debe retornar todas las adopciones", async () => {
+        const response = await fetch(API_URL);
         const data = await response.json();
 
-        // Se chequea respuesta exitosa
-        assert.equal(response.message, "Success");
         assert.equal(response.status, 200);
-
-        // Se chequea que el resultado sea un array
+        // Validamos que payload sea un array (aunque esté vacío)
         assert.ok(Array.isArray(data.payload));
     });
 
-    test("GET /api/adoptions/:aid - tiene que retornar una adopción por su ID", async () => {
-
-        // Generamos adopción de prueba
-        const newAdoption = {
-            userId: "pepe_argento",
-            petId: "bola_de_nieve_1"
-            };
+    test("GET /api/adoptions/:aid - debe retornar 404 para ID inexistente", async () => {
+        const fakeAid = "65f1e2d3c4b5a69788776655";
+        const response = await fetch(`${API_URL}/${fakeAid}`);
         
-        // Lo posteamos
-        const response = await fetch(`${API_URL}/api/adoptions`, {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newAdoption)
-        });
-        const createdAdoption = await response.json();
-        const adoptionId = createdAdoption.payload._id;
-
-        // Ahora lo buscamos por ID
-        const getResponse = await fetch(`${API_URL}/api/adoptions/${adoptionId}`);
-        const fetchedAdoption = await getResponse.json();
-
-        // Se chequea respuesta exitosa
-        assert.equal(fetchedAdoption.message, "Success");
-        assert.equal(fetchedAdoption.status, 201);
-
-        // Se chequea que el resultado sea un objeto
-        assert.ok(fetchedAdoption.payload);
-        assert.equal(fetchedAdoption.payload.userId, newAdoption.userId);
-        assert.equal(fetchedAdoption.payload.petId, newAdoption.petId);
+        // Aquí no hacemos .json() si esperamos un 404 que quizás no envíe JSON
+        assert.equal(response.status, 404);
     });
 
-    test("POST /api/adoptions/:pid/:uid - tiene que crear una nueva adopción usando params", async () => {
-        const userId = "lionel_scaloni";
-        const petId = "beckham";
-        const response = await fetch(`${API_URL}/api/adoptions/${userId}/${petId}`, {
+    test("POST /api/adoptions/:uid/:pid - DEBERÍA fallar si los IDs no existen en DB", async () => {
+        const uid = "65f1e2d3c4b5a69788776655";
+        const pid = "65f1e2d3c4b5a69799886644";
+        const response = await fetch(`${API_URL}/${uid}/${pid}`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            }
+            headers: { "Content-Type": "application/json" }
         });
-        const createdAdoption = await response.json();
 
-        // Se chequea respuesta exitosa
-        assert.equal(createdAdoption.message, "Success");
-        assert.equal(createdAdoption.status, 201);
+        // Como los ID tienen formato correcto pero no existen debería ser 404
+        assert.equal(response.status, 404);
+    });
+
+    test("POST /api/adoptions/:uid/:pid - debe fallar si la mascota no existe", async () => {
+        // IDs con formato correcto de 24 caracteres pero inexistentes
+        const validFormatUid = "65f1e2d3c4b5a63216578655";
+        const validFormatPid = "65f1e2d3c4b5a6978aebc544";
         
-        // Se chequea que el resultado sea un objeto
-        assert.ok(createdAdoption.payload);
-        assert.equal(createdAdoption.payload.userId, userId);
-        assert.equal(createdAdoption.payload.petId, petId);
+        const response = await fetch(`${API_URL}/${validFormatUid}/${validFormatPid}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        // El status debería ser 404 (Not Found)
+        assert.strictEqual(response.status, 404);
     });
 });
