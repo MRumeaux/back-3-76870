@@ -1,5 +1,5 @@
 import generatePetsMocks from "../mocks/pets.mocks.js";
-import generateUsersMocks from "../mocks/users.mocks.js";
+import generateUsersMocks from "../mocks/users.mock.js";
 import { usersService, petsService } from "../services/index.js";
 
 class mocksController {

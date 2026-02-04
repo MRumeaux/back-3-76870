@@ -12,5 +12,5 @@ export const info = {
             }
         ]
     },
-    apis: [`${process.cwd()}/src/docs/*.yml`] // Busca todos los archivos yml en docs
+    apis: [`${process.cwd()}/src/docs/*.yml`] // Buscamos todos los archivos yml en docs
 };

@@ -1,6 +1,5 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 import usersRouter from './src/routes/users.router.js';
@@ -26,6 +25,7 @@ initMongoDB()
 app.use(express.json());
 app.use(cookieParser());
 
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(spects));
 app.use('/api/users',usersRouter);
 app.use('/api/pets',petsRouter);
 app.use('/api/adoptions',adoptionsRouter);

@@ -1,4 +1,4 @@
-import variables_env from "./variables_env";
+import variables_env from './variables_env.js';
 import { connect } from "mongoose";
 
 export const initMongoDB = async() => {
