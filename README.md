@@ -1,4 +1,4 @@
-- AdoptMe API - Entrega Final Backend III
+AdoptMe API - Entrega Final Backend III
 - Esta API está desarrollada con Node.js, Express y MongoDB.
 
 Características
