@@ -8,6 +8,7 @@ Características
 - Mocking: Generación de datos de prueba para usuarios y mascotas.
 
 🛠️ Instalación y Uso
+
 Opción 1: Docker (Recomendado)
 No necesitás instalar dependencias locales, solo tener Docker corriendo.
 
