@@ -13,7 +13,7 @@ No necesitás instalar dependencias locales, solo tener Docker corriendo.
 
 Si ejecutás por consola, seguí los siguientes pasos:
 - Descargar la imagen: docker pull mrumeaux/api-76870
-- - Ejecutar el contenedor: docker run -p 8080:8080 mrumeaux/api-76870
+- Ejecutar el contenedor: docker run -p 8080:8080 mrumeaux/api-76870
 - Acceder: Abrí http://localhost:8080/api-docs en algún navegador.
 
 Opción 2: Instalación Local
