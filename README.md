@@ -1,5 +1,5 @@
 - AdoptMe API - Entrega Final Backend III
-Esta API está desarrollada con Node.js, Express y MongoDB.
+- Esta API está desarrollada con Node.js, Express y MongoDB.
 
 Características
 - Documentación interactiva: Swagger integrado.
