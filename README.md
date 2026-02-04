@@ -12,14 +12,14 @@ Opción 1: Docker (Recomendado)
 No necesitás instalar dependencias locales, solo tener Docker corriendo.
 
 Si ejecutás por consola, seguí los siguientes pasos:
-1 - Descargar la imagen: docker pull mrumeaux/api-76870
-2 - Ejecutar el contenedor: docker run -p 8080:8080 mrumeaux/api-76870
-3 - Acceder: Abrí http://localhost:8080/api-docs en algún navegador.
+- Descargar la imagen: docker pull mrumeaux/api-76870
+- - Ejecutar el contenedor: docker run -p 8080:8080 mrumeaux/api-76870
+- Acceder: Abrí http://localhost:8080/api-docs en algún navegador.
 
 Opción 2: Instalación Local
-1 - Cloná el repositorio.
-2 - Instalá las dependencias: npm install.
-3 - Configurá tu archivo .env con la MONGO_URL.
+- Cloná el repositorio.
+- Instalá las dependencias: npm install.
+- Configurá tu archivo .env con la MONGO_URL.
 
 Para iniciar la app (desde la ruta donde pegues los archivos): node app.js
 
